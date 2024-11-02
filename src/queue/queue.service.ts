@@ -10,6 +10,7 @@ export class QueueService {
 
     async addBirthdayJob(data: User, delay?: number) {
       return await this.myQueue.add(data, {
+        jobId: `birthday-${data.id}`,
         delay: delay,
         attempts: 3,
       });
@@ -20,9 +21,12 @@ export class QueueService {
         const now = moment.tz(user.location);
         const at9AM = now.clone().hour(9).minute(0).second(0);
 
-        const delay = now.isBefore(at9AM) ? at9AM.diff(now) : 0;
+        const diffInHours = at9AM.diff(now, 'hours', true);
 
-        this.addBirthdayJob(user, delay);
+        if (diffInHours <= 3) {
+          const delay = now.isBefore(at9AM) ? at9AM.diff(now) : 0;
+          this.addBirthdayJob(user, delay);
+        }
       }
     }
 
