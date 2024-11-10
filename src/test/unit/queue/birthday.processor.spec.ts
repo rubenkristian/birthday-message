@@ -46,7 +46,7 @@ describe('BirthdayProcessor', () => {
 
       expect(axiosMock.post).toHaveBeenCalledWith(process.env.EMAIL_SERVICE_URL, {
         email: user.email,
-        message: `Hey, John Doe, it’s your birthday`,
+        message: `Hey, John Doe, it's your birthday`,
       });
       expect(userServiceMock.update).toHaveBeenCalledWith(user.id, {
         ...user,

@@ -28,30 +28,39 @@ export class UserService {
   }
 
   async findOne(id: number): Promise<User> {
-    return await this.userRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: {
         id: id
       }
     });
+
+    if (user) {
+      return user;
+    }
+
+    throw new HttpException("User not found!", HttpStatus.NOT_FOUND);
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-    if (moment.tz.zone(updateUserDto.location)) {
-      await this.userRepository.update(id, {
-        first_name: updateUserDto.first_name,
-        last_name: updateUserDto.last_name,
-        birthday: updateUserDto.birthday,
-        email: updateUserDto.email,
-        location: updateUserDto.location
-      });
+    const user = await this.findOne(id);
 
-      return await this.userRepository.findOne({
-        where: {
-          id: id
-        }
-      });
+    if (!user) {
+      throw new HttpException(`User with id ${id} not found!`, HttpStatus.NOT_FOUND);
     }
-    throw new HttpException("Invalid timezone format", HttpStatus.BAD_REQUEST);
+
+    if (!moment.tz.zone(updateUserDto.location)) {
+      throw new HttpException("Invalid timezone format", HttpStatus.BAD_REQUEST);
+    }
+
+    await this.userRepository.update(id, {
+      first_name: updateUserDto.first_name,
+      last_name: updateUserDto.last_name,
+      birthday: updateUserDto.birthday,
+      email: updateUserDto.email,
+      location: updateUserDto.location
+    });
+
+    return user;
   }
 
   async remove(id: number): Promise<boolean> {

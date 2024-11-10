@@ -40,10 +40,12 @@ describe('QueueService', () => {
 
       const at9AM = mockMoment.clone().hour(9).minute(0).second(0);
       const delay = at9AM.diff(mockMoment);
+      const jobId = `birthday-${user.id}`;
 
       expect(queueMock.add).toHaveBeenCalledWith(user, {
         delay: delay,
         attempts: 3,
+        jobId: jobId,
       });
     });
 
@@ -52,12 +54,14 @@ describe('QueueService', () => {
       const mockMoment = moment().set({ hour: 10, minute: 0 }); // Simulate 10 AM
 
       jest.spyOn(moment, 'tz').mockReturnValue(mockMoment);
+      const jobId = `birthday-${user.id}`;
 
       await queueService.checkAndScheduleSystem([user]);
 
       expect(queueMock.add).toHaveBeenCalledWith(user, {
         delay: 0,
         attempts: 3,
+        jobId: jobId,
       });
     });
   });

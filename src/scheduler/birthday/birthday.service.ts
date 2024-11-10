@@ -10,7 +10,7 @@ export class BirthdayService {
         private readonly userService: UserService
     ){}
 
-    @Interval(3 * 60 * 60 * 1000)
+    @Interval(60 * 60 * 1000)
     async handler() {
         const users = await this.userService.getTodayUserBirthday();
         this.myQueueService.checkAndScheduleSystem(users);

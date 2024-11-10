@@ -1,5 +1,4 @@
 import { Repository } from "typeorm";
-import * as moment from 'moment-timezone';
 
 export type MockType<T> = {
   [P in keyof T]?: jest.Mock<{}>; 

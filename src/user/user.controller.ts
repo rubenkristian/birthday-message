@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpException, 
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Response } from 'express';
 import { QueryFailedError } from 'typeorm';
 
 @Controller('user')
@@ -48,16 +47,11 @@ export class UserController {
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    if (await this.userService.remove(+id)) {
-      return {
-        status: 201,
-        message: 'success delete user'
-      };
-    }
+    const statusRemove = await this.userService.remove(+id);
 
     return {
       status: 201,
-      message: 'failed to delete user'
+      message: statusRemove ? 'success delete user' : 'failed to delete user',
     };
   }
 }

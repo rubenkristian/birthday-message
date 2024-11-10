@@ -20,7 +20,7 @@ export class BirthdayProcessor {
         try {
             const response = await axios.post(process.env.EMAIL_SERVICE_URL, {
                 email: job.data.email,
-                message: `Hey, ${user.first_name} ${user.last_name}, it’s your birthday`,
+                message: `Hey, ${user.first_name} ${user.last_name}, it's your birthday`,
             });
     
             if (response && response.status === 200) {

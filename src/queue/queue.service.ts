@@ -21,9 +21,9 @@ export class QueueService {
         const now = moment.tz(user.location);
         const at9AM = now.clone().hour(9).minute(0).second(0);
 
-        const diffInHours = at9AM.diff(now, 'hours', true);
+        const diffInHours = at9AM.diff(now, 'minutes', true);
 
-        if (diffInHours <= 3) {
+        if (diffInHours <= 60) {
           const delay = now.isBefore(at9AM) ? at9AM.diff(now) : 0;
           this.addBirthdayJob(user, delay);
         }
